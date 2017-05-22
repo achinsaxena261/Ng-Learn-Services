@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NgLearnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Forum">
+          <Key>
+            <PropertyRef Name="qnid" />
+          </Key>
+          <Property Name="qnid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="usrid" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dscrp" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'NgLearn.dbo.Forum_DTL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Forum_DTL">
+          <Key>
+            <PropertyRef Name="frmid" />
+            <PropertyRef Name="usrid" />
+            <PropertyRef Name="reply" />
+            <PropertyRef Name="accepted" />
+          </Key>
+          <Property Name="frmid" Type="int" Nullable="false" />
+          <Property Name="usrid" Type="int" Nullable="false" />
+          <Property Name="reply" Type="varchar(max)" Nullable="false" />
+          <Property Name="accepted" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subjects">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subject" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="techid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Technologies">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="domain" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tutorials">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="subid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="pwd" Type="varchar" MaxLength="50" />
+          <Property Name="uname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="oauth" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="gender" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="imgpath" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_Forum_DTL_Forum">
+          <End Role="Forum" Type="Self.Forum" Multiplicity="1" />
+          <End Role="Forum_DTL" Type="Self.Forum_DTL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forum">
+              <PropertyRef Name="qnid" />
+            </Principal>
+            <Dependent Role="Forum_DTL">
+              <PropertyRef Name="frmid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Forum_DTL_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Forum_DTL" Type="Self.Forum_DTL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forum_DTL">
+              <PropertyRef Name="usrid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Forum_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Forum" Type="Self.Forum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forum">
+              <PropertyRef Name="usrid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_Technologies">
+          <End Role="Technologies" Type="Self.Technologies" Multiplicity="1" />
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technologies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects">
+              <PropertyRef Name="techid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tutorials_Subjects">
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
+          <End Role="Tutorials" Type="Self.Tutorials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tutorials">
+              <PropertyRef Name="subid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NgLearnModelStoreContainer">
+          <EntitySet Name="Forum" EntityType="Self.Forum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Technologies" EntityType="Self.Technologies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tutorials" EntityType="Self.Tutorials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Forum_DTL" EntityType="Self.Forum_DTL" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Forum_DTL].[frmid] AS [frmid], 
+    [Forum_DTL].[usrid] AS [usrid], 
+    [Forum_DTL].[reply] AS [reply], 
+    [Forum_DTL].[accepted] AS [accepted]
+    FROM [dbo].[Forum_DTL] AS [Forum_DTL]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Forum_DTL_Forum" Association="Self.FK_Forum_DTL_Forum">
+            <End Role="Forum" EntitySet="Forum" />
+            <End Role="Forum_DTL" EntitySet="Forum_DTL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Forum_DTL_Users" Association="Self.FK_Forum_DTL_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Forum_DTL" EntitySet="Forum_DTL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Forum_Users" Association="Self.FK_Forum_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Forum" EntitySet="Forum" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_Technologies" Association="Self.FK_Subjects_Technologies">
+            <End Role="Technologies" EntitySet="Technologies" />
+            <End Role="Subjects" EntitySet="Subjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tutorials_Subjects" Association="Self.FK_Tutorials_Subjects">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="Tutorials" EntitySet="Tutorials" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NgLearnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subject1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="techid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Technology" Relationship="Self.FK_Subjects_Technologies" FromRole="Subjects" ToRole="Technologies" />
+          <NavigationProperty Name="Tutorials" Relationship="NgLearnModel.FK_Tutorials_Subjects" FromRole="Subject" ToRole="Tutorial" />
+        </EntityType>
+        <EntityType Name="Technology">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="domain" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Subjects" Relationship="Self.FK_Subjects_Technologies" FromRole="Technologies" ToRole="Subjects" />
+        </EntityType>
+        <Association Name="FK_Subjects_Technologies">
+          <End Role="Technologies" Type="Self.Technology" Multiplicity="1" />
+          <End Role="Subjects" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Technologies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects">
+              <PropertyRef Name="techid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NgLearnEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Subjects" EntityType="Self.Subject" />
+          <EntitySet Name="Technologies" EntityType="Self.Technology" />
+          <AssociationSet Name="FK_Subjects_Technologies" Association="Self.FK_Subjects_Technologies">
+            <End Role="Technologies" EntitySet="Technologies" />
+            <End Role="Subjects" EntitySet="Subjects" />
+          </AssociationSet>
+          <EntitySet Name="Tutorials" EntityType="NgLearnModel.Tutorial" />
+          <AssociationSet Name="FK_Tutorials_Subjects" Association="NgLearnModel.FK_Tutorials_Subjects">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="Tutorial" EntitySet="Tutorials" />
+          </AssociationSet>
+          <EntitySet Name="Fora" EntityType="NgLearnModel.Forum" />
+          <EntitySet Name="Forum_DTL" EntityType="NgLearnModel.Forum_DTL" />
+          <AssociationSet Name="FK_Forum_DTL_Forum" Association="NgLearnModel.FK_Forum_DTL_Forum">
+            <End Role="Forum" EntitySet="Fora" />
+            <End Role="Forum_DTL" EntitySet="Forum_DTL" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="NgLearnModel.User" />
+          <AssociationSet Name="FK_Forum_Users" Association="NgLearnModel.FK_Forum_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Forum" EntitySet="Fora" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Forum_DTL_Users" Association="NgLearnModel.FK_Forum_DTL_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Forum_DTL" EntitySet="Forum_DTL" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Tutorial">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="url" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="subid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Subject" Relationship="NgLearnModel.FK_Tutorials_Subjects" FromRole="Tutorial" ToRole="Subject" />
+        </EntityType>
+        <Association Name="FK_Tutorials_Subjects">
+          <End Type="NgLearnModel.Subject" Role="Subject" Multiplicity="1" />
+          <End Type="NgLearnModel.Tutorial" Role="Tutorial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tutorial">
+              <PropertyRef Name="subid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Forum">
+          <Key>
+            <PropertyRef Name="qnid" />
+          </Key>
+          <Property Name="qnid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usrid" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dscrp" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Forum_DTL" Relationship="NgLearnModel.FK_Forum_DTL_Forum" FromRole="Forum" ToRole="Forum_DTL" />
+          <NavigationProperty Name="User" Relationship="NgLearnModel.FK_Forum_Users" FromRole="Forum" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Forum_DTL">
+          <Key>
+            <PropertyRef Name="frmid" />
+            <PropertyRef Name="usrid" />
+            <PropertyRef Name="reply" />
+            <PropertyRef Name="accepted" />
+          </Key>
+          <Property Name="frmid" Type="Int32" Nullable="false" />
+          <Property Name="usrid" Type="Int32" Nullable="false" />
+          <Property Name="reply" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="accepted" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Forum" Relationship="NgLearnModel.FK_Forum_DTL_Forum" FromRole="Forum_DTL" ToRole="Forum" />
+          <NavigationProperty Name="User" Relationship="NgLearnModel.FK_Forum_DTL_Users" FromRole="Forum_DTL" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Forum_DTL_Forum">
+          <End Type="NgLearnModel.Forum" Role="Forum" Multiplicity="1" />
+          <End Type="NgLearnModel.Forum_DTL" Role="Forum_DTL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forum">
+              <PropertyRef Name="qnid" />
+            </Principal>
+            <Dependent Role="Forum_DTL">
+              <PropertyRef Name="frmid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="oauth" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="imgpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Fora" Relationship="NgLearnModel.FK_Forum_Users" FromRole="User" ToRole="Forum" />
+          <NavigationProperty Name="Forum_DTL" Relationship="NgLearnModel.FK_Forum_DTL_Users" FromRole="User" ToRole="Forum_DTL" />
+        </EntityType>
+        <Association Name="FK_Forum_Users">
+          <End Type="NgLearnModel.User" Role="User" Multiplicity="1" />
+          <End Type="NgLearnModel.Forum" Role="Forum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forum">
+              <PropertyRef Name="usrid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Forum_DTL_Users">
+          <End Type="NgLearnModel.User" Role="User" Multiplicity="1" />
+          <End Type="NgLearnModel.Forum_DTL" Role="Forum_DTL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forum_DTL">
+              <PropertyRef Name="usrid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NgLearnModelStoreContainer" CdmEntityContainer="NgLearnEntities">
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="NgLearnModel.Subject">
+              <MappingFragment StoreEntitySet="Subjects">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="subject1" ColumnName="subject" />
+                <ScalarProperty Name="techid" ColumnName="techid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Technologies">
+            <EntityTypeMapping TypeName="NgLearnModel.Technology">
+              <MappingFragment StoreEntitySet="Technologies">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="domain" ColumnName="domain" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tutorials">
+            <EntityTypeMapping TypeName="NgLearnModel.Tutorial">
+              <MappingFragment StoreEntitySet="Tutorials">
+                <ScalarProperty Name="subid" ColumnName="subid" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fora">
+            <EntityTypeMapping TypeName="NgLearnModel.Forum">
+              <MappingFragment StoreEntitySet="Forum">
+                <ScalarProperty Name="dscrp" ColumnName="dscrp" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="usrid" ColumnName="usrid" />
+                <ScalarProperty Name="qnid" ColumnName="qnid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Forum_DTL">
+            <EntityTypeMapping TypeName="NgLearnModel.Forum_DTL">
+              <MappingFragment StoreEntitySet="Forum_DTL">
+                <ScalarProperty Name="accepted" ColumnName="accepted" />
+                <ScalarProperty Name="reply" ColumnName="reply" />
+                <ScalarProperty Name="usrid" ColumnName="usrid" />
+                <ScalarProperty Name="frmid" ColumnName="frmid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="NgLearnModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="imgpath" ColumnName="imgpath" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="oauth" ColumnName="oauth" />
+                <ScalarProperty Name="uname" ColumnName="uname" />
+                <ScalarProperty Name="pwd" ColumnName="pwd" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

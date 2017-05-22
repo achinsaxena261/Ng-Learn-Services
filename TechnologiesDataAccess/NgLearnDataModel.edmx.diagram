@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ff8deb9256ab4511901df3f95b81f865" Name="Diagram1">
+        <EntityTypeShape EntityType="NgLearnModel.Subject" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="NgLearnModel.Technology" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="NgLearnModel.FK_Subjects_Technologies" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="NgLearnModel.Tutorial" Width="1.5" PointX="5.25" PointY="1" />
+        <AssociationConnector Association="NgLearnModel.FK_Tutorials_Subjects" />
+        <EntityTypeShape EntityType="NgLearnModel.Forum" Width="1.5" PointX="3" PointY="4.125" />
+        <EntityTypeShape EntityType="NgLearnModel.Forum_DTL" Width="1.5" PointX="5.25" PointY="4.125" />
+        <AssociationConnector Association="NgLearnModel.FK_Forum_DTL_Forum" />
+        <EntityTypeShape EntityType="NgLearnModel.User" Width="1.5" PointX="0.75" PointY="3.875" />
+        <AssociationConnector Association="NgLearnModel.FK_Forum_Users" />
+        <AssociationConnector Association="NgLearnModel.FK_Forum_DTL_Users" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
