@@ -40,7 +40,7 @@ namespace NgLearnService.Controllers
             {
                 using (NgLearnEntities entities = new NgLearnEntities())
                 {
-                    var user = entities.Users.ToList().Where(o => o.email == email && o.pwd == pwd).FirstOrDefault();
+                    var user = entities.Users.ToList().Where(o => o.email.ToLower().Equals(email.ToLower()) && o.pwd == pwd).FirstOrDefault();
                     return Request.CreateResponse(HttpStatusCode.OK, new Users() { email = user.email, gender = user.gender, name = user.uname,img=user.imgpath == null? string.Empty : user.imgpath });
                 }
             }
@@ -49,8 +49,6 @@ namespace NgLearnService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
-
-
-
+ 
     }
 }

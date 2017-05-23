@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ff8deb9256ab4511901df3f95b81f865" Name="Diagram1">
         <EntityTypeShape EntityType="NgLearnModel.Subject" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="NgLearnModel.Technology" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="NgLearnModel.Technology" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <AssociationConnector Association="NgLearnModel.FK_Subjects_Technologies" ManuallyRouted="false" />
         <EntityTypeShape EntityType="NgLearnModel.Tutorial" Width="1.5" PointX="5.25" PointY="1" />
         <AssociationConnector Association="NgLearnModel.FK_Tutorials_Subjects" />
