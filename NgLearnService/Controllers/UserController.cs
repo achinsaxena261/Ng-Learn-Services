@@ -29,11 +29,11 @@ namespace NgLearnService.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public HttpResponseMessage ValidateUser([FromUri]string email,string pwd)
         {
             try
@@ -46,9 +46,35 @@ namespace NgLearnService.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
- 
+
+        public HttpResponseMessage Post([FromUri]Users user)
+        {
+            try
+            {
+                using (NgLearnEntities entities = new NgLearnEntities())
+                {
+                    entities.Users.Add(new User()
+                    {
+                        uname = user.name,
+                        gender = user.gender,
+                        email = user.email,
+                        pwd = user.pwd,
+                        oauth = "F",
+                        imgpath = ""
+                    });
+                    entities.SaveChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK, "User saved successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
     }
 }

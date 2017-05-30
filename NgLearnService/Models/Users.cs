@@ -14,8 +14,10 @@ namespace NgLearnService.Models
         [DataMember]
         public string gender { get; set; }
         [DataMember]
+        public string img { get; set; }
+        [DataMember]
         public string email { get; set; }
         [DataMember]
-        public string img { get; set; }
+        public string pwd { get; set; }
     }
 }
